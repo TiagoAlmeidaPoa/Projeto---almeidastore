@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.tiago.almeidastore.entity.Address;
 import com.tiago.almeidastore.entity.Category;
 import com.tiago.almeidastore.entity.City;
+import com.tiago.almeidastore.entity.Customer;
 import com.tiago.almeidastore.entity.Product;
 import com.tiago.almeidastore.entity.State;
+import com.tiago.almeidastore.entity.enums.TypeCustomer;
+import com.tiago.almeidastore.repositories.AddressRepository;
 import com.tiago.almeidastore.repositories.CategoryRepository;
 import com.tiago.almeidastore.repositories.CityRepository;
+import com.tiago.almeidastore.repositories.CustomerRepository;
 import com.tiago.almeidastore.repositories.ProductRepository;
 import com.tiago.almeidastore.repositories.StateRepository;
 
@@ -30,6 +35,12 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 	
 	@Autowired
 	private StateRepository stateRepository;
+	
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AlmeidastoreApplication.class, args);
@@ -68,8 +79,17 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 		stateRepository.saveAll(Arrays.asList(state1, state2));
 		cityRepository.saveAll(Arrays.asList(city1, city2, city3, city4));
 		
+		Customer customer1 = new Customer(null, "Ashley", "ashley@gmail.com", "46396501082", TypeCustomer.LEGALPERSON);
+		customer1.getPhones().addAll(Arrays.asList("48956231412","51986524145"));
 		
-
+		Address address1 = new Address(null, "E Broadway St", "470", "Ap 301", "Stranger", "91420590", customer1, city1);
+		Address address2 = new Address(null, "Bad boys St", "11", "casa", "Danger", "505123", customer1, city2);
+		
+		customer1.getAddresses().addAll(Arrays.asList(address1, address2));
+		
+		customerRepository.saveAll(Arrays.asList(customer1));
+		addressRepository.saveAll(Arrays.asList(address1, address2));
+		
 	}
 
 }
