@@ -83,7 +83,7 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 		customer1.getPhones().addAll(Arrays.asList("48956231412","51986524145"));
 		
 		Address address1 = new Address(null, "E Broadway St", "470", "Ap 301", "Stranger", "91420590", customer1, city1);
-		Address address2 = new Address(null, "Bad boys St", "11", "casa", "Danger", "505123", customer1, city2);
+		Address address2 = new Address(null, "Bad boys St", "11", "house", "Danger", "505123", customer1, city2);
 		
 		customer1.getAddresses().addAll(Arrays.asList(address1, address2));
 		
