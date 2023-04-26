@@ -34,17 +34,16 @@ public class SalesOrder implements Serializable {
 	private Customer customer;
 
 	@ManyToOne
-	@JoinColumn(name = "address_id")
+	@JoinColumn(name = "delivery_address_id")
 	private Address address;
 
 	public SalesOrder() {
 	}
 
-	public SalesOrder(Integer id, Date instant, Payment payment, Customer customer, Address address) {
+	public SalesOrder(Integer id, Date instant, Customer customer, Address address) {
 		super();
 		this.id = id;
 		this.instant = instant;
-		this.payment = payment;
 		this.customer = customer;
 		this.address = address;
 	}

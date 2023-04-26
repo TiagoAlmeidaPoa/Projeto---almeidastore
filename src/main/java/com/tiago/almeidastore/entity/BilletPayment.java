@@ -12,15 +12,16 @@ public class BilletPayment extends Payment {
 	private static final long serialVersionUID = 1L;
 
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private Date dueDate;
+	private Date paymentDate;
 
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private Date paymentDate;
+	private Date dueDate;
 
 	public BilletPayment() {
 	}
 
-	public BilletPayment(Integer id, PaymentStatus paymentStatus, SalesOrder salesOrder, Date dueDate, Date paymentDate) {
+	public BilletPayment(Integer id, PaymentStatus paymentStatus, SalesOrder salesOrder, Date dueDate,
+			Date paymentDate) {
 		super(id, paymentStatus, salesOrder);
 		this.dueDate = dueDate;
 		this.paymentDate = paymentDate;

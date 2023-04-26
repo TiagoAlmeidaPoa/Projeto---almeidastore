@@ -1,5 +1,6 @@
 package com.tiago.almeidastore;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.tiago.almeidastore.entity.Address;
+import com.tiago.almeidastore.entity.BilletPayment;
+import com.tiago.almeidastore.entity.CardPayment;
 import com.tiago.almeidastore.entity.Category;
 import com.tiago.almeidastore.entity.City;
 import com.tiago.almeidastore.entity.Customer;
+import com.tiago.almeidastore.entity.Payment;
 import com.tiago.almeidastore.entity.Product;
+import com.tiago.almeidastore.entity.SalesOrder;
 import com.tiago.almeidastore.entity.State;
+import com.tiago.almeidastore.entity.enums.PaymentStatus;
 import com.tiago.almeidastore.entity.enums.TypeCustomer;
 import com.tiago.almeidastore.repositories.AddressRepository;
 import com.tiago.almeidastore.repositories.CategoryRepository;
 import com.tiago.almeidastore.repositories.CityRepository;
 import com.tiago.almeidastore.repositories.CustomerRepository;
+import com.tiago.almeidastore.repositories.PaymentRepository;
 import com.tiago.almeidastore.repositories.ProductRepository;
+import com.tiago.almeidastore.repositories.SalesOrderRepository;
 import com.tiago.almeidastore.repositories.StateRepository;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 	
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private SalesOrderRepository salesOrderRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AlmeidastoreApplication.class, args);
@@ -89,6 +103,22 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 		
 		customerRepository.saveAll(Arrays.asList(customer1));
 		addressRepository.saveAll(Arrays.asList(address1, address2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		SalesOrder sOrder1 = new SalesOrder(null, sdf.parse("30/09/2017 10:32"), customer1, address1);
+		SalesOrder sOrder2 = new SalesOrder(null, sdf.parse("10/10/2017 19:35"), customer1, address2);
+		
+		Payment pay1 = new CardPayment(null, PaymentStatus.FINISHED, sOrder1, 6);
+		sOrder1.setPayment(pay1);
+		
+		Payment pay2 = new BilletPayment(null, PaymentStatus.PENDING, sOrder2, sdf.parse("20/10/2017 00:00"), null);
+		sOrder2.setPayment(pay2);
+		
+		customer1.getSalesOrders().addAll(Arrays.asList(sOrder1, sOrder2));
+		
+		salesOrderRepository.saveAll(Arrays.asList(sOrder1, sOrder2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 		
 	}
 
