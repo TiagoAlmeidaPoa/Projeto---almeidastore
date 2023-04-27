@@ -1,6 +1,7 @@
 package com.tiago.almeidastore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.tiago.almeidastore.entity.CardPayment;
 import com.tiago.almeidastore.entity.Category;
 import com.tiago.almeidastore.entity.City;
 import com.tiago.almeidastore.entity.Customer;
+import com.tiago.almeidastore.entity.OrderItem;
 import com.tiago.almeidastore.entity.Payment;
 import com.tiago.almeidastore.entity.Product;
 import com.tiago.almeidastore.entity.SalesOrder;
@@ -24,6 +26,7 @@ import com.tiago.almeidastore.repositories.AddressRepository;
 import com.tiago.almeidastore.repositories.CategoryRepository;
 import com.tiago.almeidastore.repositories.CityRepository;
 import com.tiago.almeidastore.repositories.CustomerRepository;
+import com.tiago.almeidastore.repositories.OrderItemRepository;
 import com.tiago.almeidastore.repositories.PaymentRepository;
 import com.tiago.almeidastore.repositories.ProductRepository;
 import com.tiago.almeidastore.repositories.SalesOrderRepository;
@@ -55,6 +58,9 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 	
 	@Autowired
 	private SalesOrderRepository salesOrderRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AlmeidastoreApplication.class, args);
@@ -120,6 +126,18 @@ public class AlmeidastoreApplication implements CommandLineRunner {
 		salesOrderRepository.saveAll(Arrays.asList(sOrder1, sOrder2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 		
+		OrderItem oi1 = new OrderItem(sOrder1, p1, 0.00, 1, 5000.00);
+		OrderItem oi2 = new OrderItem(sOrder1, p3, 0.00, 2, 300.00);
+		OrderItem oi3 = new OrderItem(sOrder2, p2, 100.00, 1, 600.00);
+		
+		sOrder1.getItems().addAll(Arrays.asList(oi1, oi2));
+		sOrder2.getItems().addAll(Arrays.asList(oi3));
+		
+		p1.getItems().addAll(Arrays.asList(oi1));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		p3.getItems().addAll(Arrays.asList(oi2));
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
 	}
 
 }

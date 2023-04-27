@@ -2,7 +2,9 @@ package com.tiago.almeidastore.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,6 +39,9 @@ public class SalesOrder implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "delivery_address_id")
 	private Address address;
+	
+	@OneToMany(mappedBy = "id.salesOrder")
+	private Set<OrderItem> items = new HashSet<>();
 
 	public SalesOrder() {
 	}
@@ -86,6 +92,14 @@ public class SalesOrder implements Serializable {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<OrderItem> items) {
+		this.items = items;
 	}
 
 	@Override
