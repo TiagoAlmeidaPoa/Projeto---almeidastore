@@ -39,7 +39,7 @@ public class SalesOrder implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "delivery_address_id")
 	private Address address;
-	
+
 	@OneToMany(mappedBy = "id.salesOrder")
 	private Set<OrderItem> items = new HashSet<>();
 

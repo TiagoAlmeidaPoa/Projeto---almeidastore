@@ -29,7 +29,7 @@ public class Address implements Serializable {
 	@JoinColumn(name = "customer_id")
 	@JsonIgnore
 	private Customer customer;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "city_id")
 	@JsonIgnore
