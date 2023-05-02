@@ -1,11 +1,14 @@
 package com.tiago.almeidastore.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.tiago.almeidastore.dto.CategoryDTO;
 import com.tiago.almeidastore.entity.Category;
 import com.tiago.almeidastore.repositories.CategoryRepository;
 import com.tiago.almeidastore.service.exception.DataIntegrityException;
@@ -40,6 +43,10 @@ public class CategoryService {
 		}catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("It is not possible to delete category with products !");
 		}
+	}
+
+	public List<CategoryDTO> findAll() {
+		return repository.findAll().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
 	}
 
 }
