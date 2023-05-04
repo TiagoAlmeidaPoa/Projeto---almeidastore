@@ -57,4 +57,8 @@ public class CategoryService {
 		return repository.findAll(pageRequest).map(obj -> new CategoryDTO(obj));
 	}
 
+	public Category fromDTO(CategoryDTO objDTO) {
+		return new Category(objDTO.getId(), objDTO.getName());
+	}
+
 }
