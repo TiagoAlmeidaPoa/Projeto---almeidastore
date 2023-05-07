@@ -28,22 +28,23 @@ public class CategoryService {
 		return cat1.orElseThrow(() -> new ObjectNotFoundException(
 				"Object not found! ID: " + id + ", Type: " + Category.class.getName()));
 	}
-	
+
 	public Category insert(Category obj) {
 		obj.setId(null);
 		return repository.save(obj);
 	}
 
-	public Category update(Category obj) {
-		findById(obj.getId());
+	public Category update(Category newObj) {
+		Category obj = findById(newObj.getId());
+		updateData(newObj, obj);
 		return repository.save(obj);
 	}
-	
+
 	public void delete(Integer id) {
 		findById(id);
 		try {
 			repository.deleteById(id);
-		}catch (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("It is not possible to delete category with products !");
 		}
 	}
@@ -51,14 +52,18 @@ public class CategoryService {
 	public List<CategoryDTO> findAll() {
 		return repository.findAll().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
 	}
-	
-	public Page<CategoryDTO> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+
+	public Page<CategoryDTO> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest).map(obj -> new CategoryDTO(obj));
 	}
 
 	public Category fromDTO(CategoryDTO objDTO) {
 		return new Category(objDTO.getId(), objDTO.getName());
+	}
+
+	private void updateData(Category newObj, Category obj) {
+		obj.setName(newObj.getName());
 	}
 
 }

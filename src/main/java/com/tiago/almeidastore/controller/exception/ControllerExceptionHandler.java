@@ -24,7 +24,7 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 
 	}
-	
+
 	@ExceptionHandler(DataIntegrityException.class)
 	public ResponseEntity<StandardError> dataIntegrityException(DataIntegrityException objectException,
 			HttpServletRequest request) {
@@ -45,7 +45,7 @@ public class ControllerExceptionHandler {
 		for (FieldError fe : objectException.getBindingResult().getFieldErrors()) {
 			error.AddErrors(fe.getField(), fe.getDefaultMessage());
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 
