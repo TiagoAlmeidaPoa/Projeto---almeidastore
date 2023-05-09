@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tiago.almeidastore.dto.CustomerDTO;
+import com.tiago.almeidastore.dto.CustomerNewDTO;
 import com.tiago.almeidastore.entity.Customer;
 import com.tiago.almeidastore.service.CustomerService;
 
@@ -37,7 +38,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerDTO objDTO) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody CustomerNewDTO objDTO) {
 		Customer obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();

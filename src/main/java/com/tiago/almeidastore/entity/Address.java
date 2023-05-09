@@ -32,7 +32,6 @@ public class Address implements Serializable {
 
 	@ManyToOne()
 	@JoinColumn(name = "city_id")
-	@JsonIgnore
 	private City city;
 
 	public Address() {

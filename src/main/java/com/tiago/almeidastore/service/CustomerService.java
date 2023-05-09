@@ -10,9 +10,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tiago.almeidastore.dto.CustomerDTO;
+import com.tiago.almeidastore.dto.CustomerNewDTO;
+import com.tiago.almeidastore.entity.Address;
+import com.tiago.almeidastore.entity.City;
 import com.tiago.almeidastore.entity.Customer;
+import com.tiago.almeidastore.entity.enums.TypeCustomer;
+import com.tiago.almeidastore.repositories.AddressRepository;
 import com.tiago.almeidastore.repositories.CustomerRepository;
 import com.tiago.almeidastore.service.exception.DataIntegrityException;
 import com.tiago.almeidastore.service.exception.ObjectNotFoundException;
@@ -22,16 +28,22 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public Customer findById(Integer id) {
 		Optional<Customer> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Object not found! ID: " + id + ", Type: " + Customer.class.getName()));
 	}
-
+	
+	@Transactional
 	public Customer insert(Customer obj) {
 		obj.setId(null);
-		return repository.save(obj);
+		obj = repository.save(obj);
+		addressRepository.saveAll(obj.getAddresses());
+		return obj;
 	}
 
 	public Customer update(Customer newObj) {
@@ -60,6 +72,21 @@ public class CustomerService {
 
 	public Customer fromDTO(CustomerDTO objDTO) {
 		return new Customer(objDTO.getId(), objDTO.getName(), objDTO.getEmail(), null, null);
+	}
+	
+	public Customer fromDTO(CustomerNewDTO objDTO) {
+		Customer customer = new Customer(null, objDTO.getName(), objDTO.getEmail(), objDTO.getCpfOrCnpj(), TypeCustomer.toEnum(objDTO.getTypeCustomer()));
+		City city = new City(objDTO.getCityId(), null, null);
+		Address address = new Address(null, objDTO.getStreet(), objDTO.getNumber(), objDTO.getComplement(), objDTO.getDistrict(), objDTO.getZipCode(), customer, city);
+		customer.getAddresses().add(address);
+		customer.getPhones().add(objDTO.getPhone1());
+		if(objDTO.getPhone2()!=null) {
+			customer.getPhones().add(objDTO.getPhone2());
+		}
+		if(objDTO.getPhone3()!=null) {
+			customer.getPhones().add(objDTO.getPhone3());
+		}
+		return customer;
 	}
 
 	private void updateData(Customer newObj, Customer obj) {
