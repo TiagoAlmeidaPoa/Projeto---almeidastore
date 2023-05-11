@@ -2,23 +2,50 @@ package com.tiago.almeidastore.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.tiago.almeidastore.service.validation.CustomerInsert;
+
+@CustomerInsert
 public class CustomerNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	
+	@NotEmpty(message = "Completion is mandatory ! ")
+	@Length(min = 3, max = 80, message = "Length must be between 3 and 80 characters")
 	private String name;
+	
+	@NotEmpty(message = "Completion is mandatory ! ")
+	@Email(message = "Invalid Email")
 	private String email;
+	
+	@NotEmpty(message = "Completion is mandatory ! ")
 	private String cpfOrCnpj;
+	
 	private Integer typeCustomer;
 
+	@NotEmpty(message = "Completion is mandatory ! ")
 	private String street;
+	
+	@NotEmpty(message = "Completion is mandatory ! ")
 	private String number;
+	
 	private String complement;
+	
 	private String district;
+	
+	@NotEmpty(message = "Completion is mandatory ! ")
 	private String zipCode;
 
+	@NotEmpty(message = "Completion is mandatory ! ")
 	private String phone1;
+	
 	private String phone2;
+	
 	private String phone3;
 
 	private Integer cityId;
